@@ -67,7 +67,7 @@ plt.axis("off")
 plt.subplot(1, 2, 2)
 plt.title("Saliency Map")
 plt.imshow(original_image)
-plt.imshow(saliency_map, cmap="jet")  # Overlay heatmap
+plt.imshow(saliency_map, cmap="hot")  # Overlay heatmap
 plt.axis("off")
 
 plt.tight_layout()
