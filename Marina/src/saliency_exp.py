@@ -72,28 +72,3 @@ plt.axis("off")
 
 plt.tight_layout()
 plt.show()
-
-
-# Make a prediction
-
-# with torch.no_grad():
-#     outputs = model(transformed_image)
-#     logits =  outputs.logits
-#     _, predicted = logits.max(1)
-#     predicted_class = predicted.item()
-   
-# saliency = Saliency(wrapped_model)
-# smooth = NoiseTunnel(saliency)
-
-
-# attributions = smooth.attribute(transformed_image, 
-#                                   nt_type="smoothgrad",
-#                                   nt_samples=50,
-#                                   stdevs=0.2,   
-#                                   target=predicted_class)
-
-# saliency_map= attributions.squeeze().cpu().detach().numpy()
-# saliency_map= np.abs(saliency_map).sum(axis=0)  # Sum across RGB channels
-# saliency_map = (saliency_map - saliency_map.min()) / (saliency_map.max() - saliency_map.min())  # Normalize to [0, 1]
-
-
