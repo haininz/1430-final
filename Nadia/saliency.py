@@ -1,31 +1,22 @@
-import PIL
 import numpy as np
-import tensorflow as tf
+from PIL import Image
+import matplotlib.pyplot as plt
 from skimage.transform import resize
-
+import tensorflow as tf
+import matplotlib.pyplot as plt
 from huggingface_hub import from_pretrained_keras
 
-import matplotlib.pyplot as plt
-
+# TODO: add your model here
 model = from_pretrained_keras('C:\\Users\\nadia\\mobilenet_v2_fake_image_detection')
-model.summary()
 
-img = PIL.Image.open("burning_ghibli_fake.jpeg") # Load image
-
+img = Image.open("AiArtData/earing-a-yellow-kimono-in-a-beautiful-and-foggy-tropical-greenh-copy-800x800.jpg") # Load image
 img = np.asarray(img) # Convert the image to a Numpy array
 
 img = resize(img, (128, 128, 3), anti_aliasing=True) # Resize the image and normalize the values (to be between 0.0 and 1.0)
-plt.imshow(img, cmap='gray', vmin=0.0, vmax=1.0) # Display image (make sure we're looking at the right thing)
-plt.show()
 
-# The Keras model expects images in a 4D array with dimensions (sample, height, width, channel)
+images = np.array([img]) 
 
-images = np.array([img]) # Keras expects more than one image (in Numpy array), so convert image(s) to such array
-print(images.shape) # Print dimensions of inference input
-
-preds = model.predict(images) # Inference
-
-model.layers[-1].activation = None # For either algorithm, we need to remove the Softmax activation function of the last layer
+model.layers[-1].activation = None # For , we need to remove the Softmax activation function of the last layer
 
 # Based on: https://github.com/keisen/tf-keras-vis/blob/master/tf_keras_vis/saliency.py
 def get_saliency_map(img_array, model):
@@ -44,7 +35,7 @@ def get_saliency_map(img_array, model):
 
   grads_disp = [np.max(g, axis=-1) for g in grads] # Finds max value in each color channel of the gradient (should be grayscale for this demo)
 
-  grad_disp = grads_disp[0] # There should be only one gradient heatmap for this demo
+  grad_disp = grads_disp[0] # There should be only one gradient heatmap
 
   grad_disp = tf.abs(grad_disp) # The absolute value of the gradient shows the effect of change at each pixel. Source: https://christophm.github.io/interpretable-ml-book/pixel-attribution.html
 
@@ -58,8 +49,8 @@ def get_saliency_map(img_array, model):
 saliency_map = get_saliency_map(images, model) # Generate saliency map for the given input image
 
 
-idx = 0 # Overlay the saliency map on top of the original input image
-ax = plt.subplot()
-ax.imshow(img, vmin=0.0, vmax=1.0)
-ax.imshow(saliency_map, cmap='magma', alpha=0.25)
+plt.figure(figsize=(6, 6))
+plt.imshow(saliency_map, cmap='hot')
+plt.axis("off")
+plt.title(f"Saliency Map (Predicted: AI)")
 plt.show()

@@ -8,6 +8,7 @@ from huggingface_hub import from_pretrained_keras
 from lime import lime_image
 import keras
 
+# thank you cs1430 staff for the easily borrowed LIME code!
 
 def LIME_explainer(model, path, timestamp):
     """
